@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alternativa para El Tiempo</title>
+    <title>RSS de El Tiempo</title>
     <style>
         body {
             margin: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
             font-family: Arial, sans-serif;
         }
         .container {
@@ -18,38 +17,44 @@
             height: 480px;
             border: 2px solid #333;
             border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            overflow-y: auto;
+            padding: 10px;
             background-color: #f9f9f9;
-            text-align: center;
         }
-        a {
+        h1 {
+            color: #333;
+        }
+        .item {
+            margin: 15px 0;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .item a {
             color: #0066cc;
-            font-size: 18px;
             text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
         }
-        a:hover {
+        .item a:hover {
             text-decoration: underline;
         }
-        img {
-            max-width: 100%;
-            max-height: 80%;
+        .description {
+            color: #555;
+            font-size: 14px;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
-    <h1>Contenido Web</h1>
+    <h1>Últimas Noticias de El Tiempo</h1>
+    <div class="container" id="rssFeed"></div>
 
-    <!-- Recuadro para El Tiempo -->
-    <div class="container">
-        <h2>El Tiempo</h2>
-        <p>Visita las últimas noticias:</p>
-        <a href="https://www.eltiempo.com" target="_blank">Ir a ElTiempo.com</a>
-        <!-- Captura estática como ejemplo -->
-        <img src="https://via.placeholder.com/600x400.png?text=Captura+de+ElTiempo.com" alt="Vista previa de El Tiempo">
-    </div>
-
-</body>
-</html>
+    <script>
+        // Usar rss2json para convertir el RSS a JSON
+        const rssUrl = 'https://api.rss2json.com/v1/api.json?rss_url=https://www.eltiempo.com/rss';
+        fetch(rssUrl)
+            .then(response => response.json())
+            .then(data => {
+                const feedContainer = document.getElementById('rssFeed');
+                if (data.status === 'ok') {
+                    data
