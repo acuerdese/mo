@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brick Gaaaaame (Debugged)</title>
+    <title>Brick Game with Failure Counter</title>
     <style>
         body {
             margin: 0;
@@ -36,10 +36,7 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Log to ensure script runs
-        console.log('Script started, canvas context:', ctx);
-
-        // Game objects (no DPR scaling for simplicity)
+        // Game objects
         const paddle = {
             width: 100,
             height: 20,
@@ -80,17 +77,10 @@
             }
         }
 
-        // Load images with logging
+        // Load images
         paddle.image.src = paddle.imageUrl;
         ball.image.src = ball.imageUrl;
         brick.image.src = brick.imageUrl;
-
-        paddle.image.onload = () => console.log('Paddle image loaded');
-        ball.image.onload = () => console.log('Ball image loaded');
-        brick.image.onload = () => console.log('Brick image loaded');
-        paddle.image.onerror = () => console.log('Paddle image failed');
-        ball.image.onerror = () => console.log('Ball image failed');
-        brick.image.onerror = () => console.log('Brick image failed');
 
         // Input handling
         let targetX = paddle.x;
@@ -100,7 +90,6 @@
             const rect = canvas.getBoundingClientRect();
             targetX = e.touches[0].clientX - rect.left - paddle.width / 2;
             clampTargetX();
-            console.log('Touch started:', targetX);
         });
 
         canvas.addEventListener('touchmove', (e) => {
@@ -112,116 +101,4 @@
 
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
-            targetX = e.clientX - rect.left - paddle.width / 2;
-            clampTargetX();
-        });
-
-        function clampTargetX() {
-            if (targetX < 0) targetX = 0;
-            if (targetX > 640 - paddle.width) targetX = 640 - paddle.width;
-        }
-
-        // Draw functions with fallbacks
-        function drawPaddle() {
-            if (paddle.image.complete && paddle.image.naturalWidth) {
-                ctx.drawImage(paddle.image, paddle.x, paddle.y, paddle.width, paddle.height);
-            } else {
-                ctx.fillStyle = 'blue';
-                ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-            }
-        }
-
-        function drawBall() {
-            if (ball.image.complete && ball.image.naturalWidth) {
-                ctx.drawImage(ball.image, ball.x - ball.radius, ball.y - ball.radius, ball.radius * 2, ball.radius * 2);
-            } else {
-                ctx.beginPath();
-                ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'red';
-                ctx.fill();
-                ctx.closePath();
-            }
-        }
-
-        function drawBricks() {
-            for (let c = 0; c < brickColumnCount; c++) {
-                for (let r = 0; r < brickRowCount; r++) {
-                    if (bricks[c][r].status === 1) {
-                        const brickX = c * (brick.width + brick.padding) + brick.offsetLeft;
-                        const brickY = r * (brick.height + brick.padding) + brick.offsetTop;
-                        bricks[c][r].x = brickX;
-                        bricks[c][r].y = brickY;
-                        if (brick.image.complete && brick.image.naturalWidth) {
-                            ctx.drawImage(brick.image, brickX, brickY, brick.width, brick.height);
-                        } else {
-                            ctx.fillStyle = 'green';
-                            ctx.fillRect(brickX, brickY, brick.width, brick.height);
-                        }
-                    }
-                }
-            }
-        }
-
-        // Collision detection
-        function collisionDetection() {
-            for (let c = 0; c < brickColumnCount; c++) {
-                for (let r = 0; r < brickRowCount; r++) {
-                    const b = bricks[c][r];
-                    if (b.status === 1) {
-                        if (ball.x > b.x && ball.x < b.x + brick.width &&
-                            ball.y > b.y && ball.y < b.y + brick.height) {
-                            ball.dy = -ball.dy;
-                            b.status = 0;
-                        }
-                    }
-                }
-            }
-        }
-
-        // Game loop
-        function update() {
-            // Move paddle
-            paddle.x += (targetX - paddle.x) * 0.2;
-
-            // Move ball
-            ball.x += ball.dx;
-            ball.y += ball.dy;
-
-            // Ball collisions
-            if (ball.x + ball.radius > 640 || ball.x - ball.radius < 0) ball.dx = -ball.dx;
-            if (ball.y - ball.radius < 0) ball.dy = -ball.dy;
-            if (ball.y + ball.radius > 480) {
-                ball.x = 320;
-                ball.y = 420;
-                ball.dx = 4;
-                ball.dy = -4;
-            }
-
-            // Paddle collision
-            if (ball.y + ball.radius > paddle.y &&
-                ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
-                ball.dy = -ball.dy;
-            }
-
-            // Brick collisions
-            collisionDetection();
-
-            // Draw
-            ctx.clearRect(0, 0, 640, 480);
-            drawBricks();
-            drawPaddle();
-            drawBall();
-
-            requestAnimationFrame(update);
-        }
-
-        // Initial render to avoid blank screen
-        ctx.fillStyle = 'black';
-        ctx.fillText('Loading...', 300, 240);
-        console.log('Initial render attempted');
-
-        // Start game immediately
-        update();
-    </script>
-</body>
-</html>
+            target
