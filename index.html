@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brick Game with Failure Counter</title>
+    <title>Responsive Brick Game with Counter</title>
     <style>
         body {
             margin: 0;
@@ -14,12 +14,11 @@
             background-color: #f0f0f0;
             font-family: Arial, sans-serif;
             overflow: hidden;
+            height: 100vh;
         }
         canvas {
             border: 2px solid #333;
             background-color: #fff;
-            max-width: 100%;
-            max-height: 90vh;
             touch-action: none;
         }
         h1 {
@@ -30,26 +29,45 @@
 </head>
 <body>
     <h1>Brick Breaker Game</h1>
-    <canvas id="gameCanvas" width="640" height="480"></canvas>
+    <canvas id="gameCanvas"></canvas>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Game objects
+        // Detect aspect ratio and set dimensions
+        const windowAspect = window.innerWidth / window.innerHeight;
+        const isTwoToOne = Math.abs(windowAspect - 0.5) < 0.1; // Approx 2:1 (0.5 = 1/2)
+        const baseWidth = isTwoToOne ? 480 : 640;
+        const baseHeight = isTwoToOne ? 960 : 480;
+
+        // Responsive scaling
+        const scale = Math.min(window.innerWidth / baseWidth, (window.innerHeight - 40) / baseHeight); // 40px for title
+        canvas.width = baseWidth;
+        canvas.height = baseHeight;
+        canvas.style.width = `${baseWidth * scale}px`;
+        canvas.style.height = `${baseHeight * scale}px`;
+
+        if (isTwoToOne) {
+            document.body.style.backgroundColor = 'black';
+        }
+
+        console.log(`Aspect ratio: ${windowAspect}, Canvas size: ${baseWidth}x${baseHeight}`);
+
+        // Game objects (adjusted for new base dimensions)
         const paddle = {
-            width: 100,
-            height: 20,
-            x: 270,
-            y: 440,
+            width: baseWidth * 0.156, // ~100/640
+            height: baseHeight * 0.0417, // ~20/480 or 40/960
+            x: baseWidth / 2 - (baseWidth * 0.156) / 2,
+            y: baseHeight - (baseHeight * 0.0833), // ~40/480 or 80/960
             image: new Image(),
             imageUrl: 'https://via.placeholder.com/100x20.png?text=Paddle'
         };
 
         const ball = {
-            radius: 10,
-            x: 320,
-            y: 420,
+            radius: baseWidth * 0.0156, // ~10/640
+            x: baseWidth / 2,
+            y: baseHeight - (baseHeight * 0.125), // ~60/480 or 120/960
             dx: 4,
             dy: -4,
             image: new Image(),
@@ -57,18 +75,18 @@
         };
 
         const brick = {
-            width: 80,
-            height: 30,
-            padding: 10,
-            offsetTop: 30,
-            offsetLeft: 30,
+            width: baseWidth * 0.125, // ~80/640
+            height: baseHeight * 0.0625, // ~30/480 or 60/960
+            padding: baseWidth * 0.0156, // ~10/640
+            offsetTop: baseHeight * 0.0625, // ~30/480 or 60/960
+            offsetLeft: baseWidth * 0.0469, // ~30/640
             image: new Image(),
             imageUrl: 'https://via.placeholder.com/80x30.png?text=Brick'
         };
 
         // Brick grid
         const brickRowCount = 3;
-        const brickColumnCount = 7;
+        const brickColumnCount = Math.floor((baseWidth - 2 * brick.offsetLeft) / (brick.width + brick.padding));
         const bricks = [];
         for (let c = 0; c < brickColumnCount; c++) {
             bricks[c] = [];
@@ -88,32 +106,32 @@
         canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             const rect = canvas.getBoundingClientRect();
-            targetX = e.touches[0].clientX - rect.left - paddle.width / 2;
+            targetX = (e.touches[0].clientX - rect.left) / scale - paddle.width / 2;
             clampTargetX();
         });
 
         canvas.addEventListener('touchmove', (e) => {
             e.preventDefault();
             const rect = canvas.getBoundingClientRect();
-            targetX = e.touches[0].clientX - rect.left - paddle.width / 2;
+            targetX = (e.touches[0].clientX - rect.left) / scale - paddle.width / 2;
             clampTargetX();
         });
 
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
-            targetX = e.clientX - rect.left - paddle.width / 2;
+            targetX = (e.clientX - rect.left) / scale - paddle.width / 2;
             clampTargetX();
         });
 
         function clampTargetX() {
             if (targetX < 0) targetX = 0;
-            if (targetX > 640 - paddle.width) targetX = 640 - paddle.width;
+            if (targetX > baseWidth - paddle.width) targetX = baseWidth - paddle.width;
         }
 
         // Failure counter
         let failureCount = 0;
 
-        // Draw functions with fallbacks
+        // Draw functions
         function drawPaddle() {
             if (paddle.image.complete && paddle.image.naturalWidth) {
                 ctx.drawImage(paddle.image, paddle.x, paddle.y, paddle.width, paddle.height);
@@ -155,11 +173,13 @@
         }
 
         function drawCounter() {
-            ctx.font = `${20 + failureCount * 10}px Arial`; // Size increases by 10px per failure
-            ctx.fillStyle = failureCount === 0 ? '#d3d3d3' : 'red'; // Light gray at 0, red after
+            const baseSize = 20;
+            const sizeIncrease = failureCount * 10;
+            ctx.font = `${baseSize + sizeIncrease}px Arial`;
+            ctx.fillStyle = failureCount === 0 ? '#d3d3d3' : 'red';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(failureCount, 320, 240); // Center of 640x480
+            ctx.fillText(failureCount.toString(), baseWidth / 2, baseHeight / 2);
         }
 
         // Collision detection
@@ -188,12 +208,12 @@
             ball.y += ball.dy;
 
             // Ball collisions
-            if (ball.x + ball.radius > 640 || ball.x - ball.radius < 0) ball.dx = -ball.dx;
+            if (ball.x + ball.radius > baseWidth || ball.x - ball.radius < 0) ball.dx = -ball.dx;
             if (ball.y - ball.radius < 0) ball.dy = -ball.dy;
-            if (ball.y + ball.radius > 480) {
-                failureCount++; // Increment counter on failure
-                ball.x = 320;
-                ball.y = 420;
+            if (ball.y + ball.radius > baseHeight) {
+                failureCount++;
+                ball.x = baseWidth / 2;
+                ball.y = baseHeight - (baseHeight * 0.125);
                 ball.dx = 4;
                 ball.dy = -4;
             }
@@ -208,11 +228,11 @@
             collisionDetection();
 
             // Draw
-            ctx.clearRect(0, 0, 640, 480);
+            ctx.clearRect(0, 0, baseWidth, baseHeight);
             drawBricks();
             drawPaddle();
             drawBall();
-            drawCounter(); // Add counter to render
+            drawCounter();
 
             requestAnimationFrame(update);
         }
