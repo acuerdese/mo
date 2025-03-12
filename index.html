@@ -1,9 +1,9 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editor de Texto con Iframes y Alternativas</title>
+    <title>Alternativa para El Tiempo</title>
     <style>
         body {
             margin: 20px;
@@ -23,58 +23,32 @@
             align-items: center;
             justify-content: center;
             background-color: #f9f9f9;
-        }
-        iframe {
-            width: 640px;
-            height: 480px;
-            border: none;
-        }
-        h1 {
             text-align: center;
-            color: #333;
-        }
-        h2 {
-            margin: 10px;
-            color: #555;
         }
         a {
             color: #0066cc;
-            text-decoration: none;
             font-size: 18px;
+            text-decoration: none;
         }
         a:hover {
             text-decoration: underline;
         }
+        img {
+            max-width: 100%;
+            max-height: 80%;
+        }
     </style>
 </head>
 <body>
-    <h1>Tres Páginas Web</h1>
+    <h1>Contenido Web</h1>
 
-    <!-- Primer recuadro: YouTube (alternativa debido al bloqueo) -->
+    <!-- Recuadro para El Tiempo -->
     <div class="container">
-        <h2>YouTube</h2>
-        <p>Este sitio bloquea iframes. Visítalo directamente:</p>
-        <a href="https://www.youtube.com" target="_blank">Abrir YouTube</a>
-        <p>O usa el enlace de un video específico permitido por la API:</p>
-        <iframe 
-            width="560" 
-            height="315" 
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-            title="YouTube video player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen>
-        </iframe>
-    </div>
-
-    <!-- Segundo recuadro: El Tiempo -->
-    <div class="container">
-        <iframe src="https://www.eltiempo.com" title="El Tiempo"></iframe>
-    </div>
-
-    <!-- Tercer recuadro: La Silla Vacía -->
-    <div class="container">
-        <iframe src="https://www.lasillavacia.com" title="La Silla Vacía"></iframe>
+        <h2>El Tiempo</h2>
+        <p>Visita las últimas noticias:</p>
+        <a href="https://www.eltiempo.com" target="_blank">Ir a ElTiempo.com</a>
+        <!-- Captura estática como ejemplo -->
+        <img src="https://via.placeholder.com/600x400.png?text=Captura+de+ElTiempo.com" alt="Vista previa de El Tiempo">
     </div>
 
 </body>
