@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customizable Brick Game (Touchscreen)</title>
+    <title>Customizable Brick Game (Touchscreen Fixed)</title>
     <style>
         body {
             margin: 0;
@@ -13,14 +13,14 @@
             align-items: center;
             background-color: #f0f0f0;
             font-family: Arial, sans-serif;
-            overflow: hidden; /* Prevent scrolling */
+            overflow: hidden;
         }
         canvas {
             border: 2px solid #333;
             background-color: #fff;
             max-width: 100%;
-            max-height: 100vh;
-            touch-action: none; /* Prevent default touch behaviors */
+            max-height: 90vh; /* Leave room for title */
+            touch-action: none;
         }
         h1 {
             color: #333;
@@ -36,7 +36,7 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Adjust canvas for device pixel ratio (better visuals on high-DPI screens)
+        // Canvas scaling for high-DPI screens
         const dpr = window.devicePixelRatio || 1;
         canvas.width = 640 * dpr;
         canvas.height = 480 * dpr;
@@ -44,56 +44,15 @@
         canvas.style.width = '640px';
         canvas.style.height = '480px';
 
-        // Game objects with customizable images
+        // Game objects
         const paddle = {
             width: 100,
             height: 20,
-            x: 640 / 2 - 50,
-            y: 480 - 40,
-            speed: 8,
+            x: 270, // Start centered (640 / 2 - 100 / 2)
+            y: 440, // Near bottom (480 - 40)
             image: new Image(),
-            imageUrl: 'https://via.placeholder.com/100x20.png?text=Paddle' // Replace with your paddle image URL
+            imageUrl: 'https://via.placeholder.com/100x20.png?text=Paddle' // Custom paddle image
         };
 
         const ball = {
-            radius: 10,
-            x: 640 / 2,
-            y: 480 - 60,
-            dx: 4,
-            dy: -4,
-            image: new Image(),
-            imageUrl: 'https://via.placeholder.com/20x20.png?text=Ball' // Replace with your ball image URL
-        };
-
-        const brick = {
-            width: 80,
-            height: 30,
-            padding: 10,
-            offsetTop: 30,
-            offsetLeft: 30,
-            image: new Image(),
-            imageUrl: 'https://via.placeholder.com/80x30.png?text=Brick' // Replace with your brick image URL
-        };
-
-        // Brick grid
-        const brickRowCount = 3;
-        const brickColumnCount = 7;
-        const bricks = [];
-        for (let c = 0; c < brickColumnCount; c++) {
-            bricks[c] = [];
-            for (let r = 0; r < brickRowCount; r++) {
-                bricks[c][r] = {
-                    x: 0,
-                    y: 0,
-                    status: 1 // 1 = active, 0 = broken
-                };
-            }
-        }
-
-        // Load images
-        paddle.image.src = paddle.imageUrl;
-        ball.image.src = ball.imageUrl;
-        brick.image.src = brick.imageUrl;
-
-        // Touch control
-        let touchX
+            radius: 10
