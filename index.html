@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editor de Texto con Iframes</title>
+    <title>Editor de Texto con Iframes y Alternativas</title>
     <style>
         body {
             margin: 20px;
@@ -11,275 +11,71 @@
             flex-direction: column;
             align-items: center;
             gap: 20px;
+            font-family: Arial, sans-serif;
         }
-        iframe {
+        .container {
             width: 640px;
             height: 480px;
             border: 2px solid #333;
             border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9f9f9;
+        }
+        iframe {
+            width: 640px;
+            height: 480px;
+            border: none;
         }
         h1 {
             text-align: center;
             color: #333;
         }
-    </style>
-</head>
-<body>
-    <h1>Tres Páginas Web en Iframes</h1>
-
-    <!-- Primer recuadro: YouTube -->
-    <iframe src="https://www.youtube.com" title="YouTube"></iframe>
-
-    <!-- Segundo recuadro: El Tiempo -->
-    <iframe src="https://www.eltiempo.com" title="El Tiempo"></iframe>
-
-    <!-- Tercer recuadro: La Silla Vacía -->
-    <iframe src="https://www.lasillavacia.com" title="La Silla Vacía"></iframe>
-
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Polished Tetris</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
+        h2 {
+            margin: 10px;
+            color: #555;
         }
-        canvas {
-            border: 1px solid #333;
-            background-color: #fff;
+        a {
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 18px;
         }
-        #score {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        #game-over {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            display: none;
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div id="score">Score: 0</div>
-    <canvas id="tetris" width="240" height="400"></canvas>
-    <div id="game-over">
-        <h2>Game Over</h2>
-        <p>Your Score: <span id="final-score"></span></p>
-        <button onclick="restartGame()">Restart</button>
+    <h1>Tres Páginas Web</h1>
+
+    <!-- Primer recuadro: YouTube (alternativa debido al bloqueo) -->
+    <div class="container">
+        <h2>YouTube</h2>
+        <p>Este sitio bloquea iframes. Visítalo directamente:</p>
+        <a href="https://www.youtube.com" target="_blank">Abrir YouTube</a>
+        <p>O usa el enlace de un video específico permitido por la API:</p>
+        <iframe 
+            width="560" 
+            height="315" 
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
     </div>
 
-    <script>
-        const canvas = document.getElementById('tetris');
-        const ctx = canvas.getContext('2d');
-        const gridSize = 20;
-        const cols = canvas.width / gridSize;
-        const rows = canvas.height / gridSize;
-        const scoreElement = document.getElementById('score');
-        const gameOverElement = document.getElementById('game-over');
-        const finalScoreElement = document.getElementById('final-score');
+    <!-- Segundo recuadro: El Tiempo -->
+    <div class="container">
+        <iframe src="https://www.eltiempo.com" title="El Tiempo"></iframe>
+    </div>
 
-        // Colors for each tetromino
-        const colors = [
-            null,       // Empty
-            '#00FFFF',  // I - Cyan
-            '#FFFF00',  // O - Yellow
-            '#800080',  // T - Purple
-            '#00FF00',  // S - Green
-            '#FF0000',  // Z - Red
-            '#0000FF',  // J - Blue
-            '#FFA500'   // L - Orange
-        ];
-
-        // Tetromino shapes
-        const tetrominoes = [
-            [[1, 1, 1, 1]],                     // I
-            [[1, 1], [1, 1]],                  // O
-            [[0, 1, 0], [1, 1, 1]],            // T
-            [[0, 1, 1], [1, 1, 0]],            // S
-            [[1, 1, 0], [0, 1, 1]],            // Z
-            [[1, 0, 0], [1, 1, 1]],            // J
-            [[0, 0, 1], [1, 1, 1]]             // L
-        ];
-
-        let board = Array(rows).fill().map(() => Array(cols).fill(0));
-        let currentPiece, pieceIndex, posX, posY, score = 0;
-        let gameRunning = true;
-        let dropInterval = 500; // milliseconds
-        let lastTime = 0;
-
-        function newPiece() {
-            pieceIndex = Math.floor(Math.random() * tetrominoes.length);
-            currentPiece = tetrominoes[pieceIndex].map(row => [...row]);
-            posX = Math.floor(cols / 2) - Math.floor(currentPiece[0].length / 2);
-            posY = 0;
-            if (collision()) {
-                gameOver();
-            }
-        }
-
-        function drawBoard() {
-            ctx.fillStyle = '#fff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = '#ddd';
-            for (let y = 0; y < rows; y++) {
-                for (let x = 0; x < cols; x++) {
-                    if (board[y][x]) {
-                        ctx.fillStyle = colors[board[y][x]];
-                        ctx.fillRect(x * gridSize, y * gridSize, gridSize - 1, gridSize - 1);
-                    }
-                    ctx.strokeRect(x * gridSize, y * gridSize, gridSize, gridSize);
-                }
-            }
-        }
-
-        function drawPiece() {
-            ctx.fillStyle = colors[pieceIndex + 1];
-            for (let y = 0; y < currentPiece.length; y++) {
-                for (let x = 0; x < currentPiece[y].length; x++) {
-                    if (currentPiece[y][x]) {
-                        ctx.fillRect((posX + x) * gridSize, (posY + y) * gridSize, gridSize - 1, gridSize - 1);
-                    }
-                }
-            }
-        }
-
-        function collision(nextX = posX, nextY = posY, piece = currentPiece) {
-            for (let y = 0; y < piece.length; y++) {
-                for (let x = 0; x < piece[y].length; x++) {
-                    if (piece[y][x]) {
-                        let newY = nextY + y;
-                        let newX = nextX + x;
-                        if (newY >= rows || newX < 0 || newX >= cols || (newY >= 0 && board[newY][newX])) {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-
-        function mergePiece() {
-            for (let y = 0; y < currentPiece.length; y++) {
-                for (let x = 0; x < currentPiece[y].length; x++) {
-                    if (currentPiece[y][x]) {
-                        board[posY + y][posX + x] = pieceIndex + 1;
-                    }
-                }
-            }
-            clearLines();
-        }
-
-        function clearLines() {
-            let linesCleared = 0;
-            for (let y = rows - 1; y >= 0; y--) {
-                if (board[y].every(cell => cell !== 0)) {
-                    board.splice(y, 1);
-                    board.unshift(Array(cols).fill(0));
-                    linesCleared++;
-                    y++; // Check the same row again after shifting
-                }
-            }
-            if (linesCleared > 0) {
-                score += linesCleared * 100;
-                scoreElement.textContent = `Score: ${score}`;
-            }
-        }
-
-        function rotatePiece() {
-            const rotated = currentPiece[0].map((_, index) =>
-                currentPiece.map(row => row[index]).reverse()
-            );
-            if (!collision(posX, posY, rotated)) {
-                currentPiece = rotated;
-            }
-        }
-
-        function drop() {
-            posY++;
-            if (collision()) {
-                posY--;
-                mergePiece();
-                newPiece();
-            }
-        }
-
-        function gameOver() {
-            gameRunning = false;
-            finalScoreElement.textContent = score;
-            gameOverElement.style.display = 'block';
-        }
-
-        function restartGame() {
-            board = Array(rows).fill().map(() => Array(cols).fill(0));
-            score = 0;
-            scoreElement.textContent = `Score: ${score}`;
-            gameOverElement.style.display = 'none';
-            gameRunning = true;
-            newPiece();
-            gameLoop(0);
-        }
-
-        // Keyboard controls
-        document.addEventListener('keydown', (e) => {
-            if (!gameRunning) return;
-            if (e.key === 'ArrowLeft' && !collision(posX - 1)) posX--;
-            if (e.key === 'ArrowRight' && !collision(posX + 1)) posX++;
-            if (e.key === 'ArrowDown') drop();
-            if (e.key === 'ArrowUp') rotatePiece();
-            drawBoard();
-            drawPiece();
-        });
-
-        // Game loop
-        function gameLoop(currentTime) {
-            if (!gameRunning) return;
-            requestAnimationFrame(gameLoop);
-            if (currentTime - lastTime >= dropInterval) {
-                drop();
-                lastTime = currentTime;
-            }
-            drawBoard();
-            drawPiece();
-        }
-
-        newPiece();
-        requestAnimationFrame(gameLoop);
-    </script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-   
-<html>
-<body>
-    
-   <iframe width="1080" height="920" src="//ok.ru/videoembed/9092976151192?nochat=1" frameborder="0" allow="autoplay" allowfullscreen></iframe> 
-   <body style="background-color:black;">
- 
- 
-</p>
- 
+    <!-- Tercer recuadro: La Silla Vacía -->
+    <div class="container">
+        <iframe src="https://www.lasillavacia.com" title="La Silla Vacía"></iframe>
+    </div>
 
 </body>
-
 </html>
