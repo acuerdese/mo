@@ -1,60 +1,99 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSS de El Tiempo</title>
+    <title>Customizable Brick Game (Touchscreen)</title>
     <style>
         body {
-            margin: 20px;
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            background-color: #f0f0f0;
             font-family: Arial, sans-serif;
+            overflow: hidden; /* Prevent scrolling */
         }
-        .container {
-            width: 640px;
-            height: 480px;
+        canvas {
             border: 2px solid #333;
-            border-radius: 5px;
-            overflow-y: auto;
-            padding: 10px;
-            background-color: #f9f9f9;
+            background-color: #fff;
+            max-width: 100%;
+            max-height: 100vh;
+            touch-action: none; /* Prevent default touch behaviors */
         }
         h1 {
             color: #333;
-        }
-        .item {
-            margin: 15px 0;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-        }
-        .item a {
-            color: #0066cc;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .item a:hover {
-            text-decoration: underline;
-        }
-        .description {
-            color: #555;
-            font-size: 14px;
-            margin-top: 5px;
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
-    <h1>Últimas Noticias de El Tiempo</h1>
-    <div class="container" id="rssFeed"></div>
+    <h1>Brick Breaker Game</h1>
+    <canvas id="gameCanvas" width="640" height="480"></canvas>
 
     <script>
-        // Usar rss2json para convertir el RSS a JSON
-        const rssUrl = 'https://api.rss2json.com/v1/api.json?rss_url=https://www.eltiempo.com/rss';
-        fetch(rssUrl)
-            .then(response => response.json())
-            .then(data => {
-                const feedContainer = document.getElementById('rssFeed');
-                if (data.status === 'ok') {
-                    data
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Adjust canvas for device pixel ratio (better visuals on high-DPI screens)
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = 640 * dpr;
+        canvas.height = 480 * dpr;
+        ctx.scale(dpr, dpr);
+        canvas.style.width = '640px';
+        canvas.style.height = '480px';
+
+        // Game objects with customizable images
+        const paddle = {
+            width: 100,
+            height: 20,
+            x: 640 / 2 - 50,
+            y: 480 - 40,
+            speed: 8,
+            image: new Image(),
+            imageUrl: 'https://via.placeholder.com/100x20.png?text=Paddle' // Replace with your paddle image URL
+        };
+
+        const ball = {
+            radius: 10,
+            x: 640 / 2,
+            y: 480 - 60,
+            dx: 4,
+            dy: -4,
+            image: new Image(),
+            imageUrl: 'https://via.placeholder.com/20x20.png?text=Ball' // Replace with your ball image URL
+        };
+
+        const brick = {
+            width: 80,
+            height: 30,
+            padding: 10,
+            offsetTop: 30,
+            offsetLeft: 30,
+            image: new Image(),
+            imageUrl: 'https://via.placeholder.com/80x30.png?text=Brick' // Replace with your brick image URL
+        };
+
+        // Brick grid
+        const brickRowCount = 3;
+        const brickColumnCount = 7;
+        const bricks = [];
+        for (let c = 0; c < brickColumnCount; c++) {
+            bricks[c] = [];
+            for (let r = 0; r < brickRowCount; r++) {
+                bricks[c][r] = {
+                    x: 0,
+                    y: 0,
+                    status: 1 // 1 = active, 0 = broken
+                };
+            }
+        }
+
+        // Load images
+        paddle.image.src = paddle.imageUrl;
+        ball.image.src = ball.imageUrl;
+        brick.image.src = brick.imageUrl;
+
+        // Touch control
+        let touchX
