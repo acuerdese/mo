@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,14 @@
 <body>
     <div id="game-container">
         <canvas id="game-canvas"></canvas>
+        
+        <!-- Preload images -->
+        <div id="preload-images" style="display:none;">
+            <img id="bird-img" src="bird.png" alt="Bird">
+            <img id="pipe-top-img" src="pipe-top.png" alt="Top Pipe">
+            <img id="pipe-bottom-img" src="pipe-bottom.png" alt="Bottom Pipe">
+            <img id="background-img" src="background.png" alt="Background">
+        </div>
         
         <div id="game-over">
             <div class="modal-content">
