@@ -1,59 +1,14 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Flappy Bird</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2f80ed">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird - Touch Version</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="game-container">
-        <canvas id="game-canvas"></canvas>
-        
-        <!-- Preload images -->
-        <div id="preload-images" style="display:none;">
-            <img id="bird-img" src="bird.png" alt="Bird">
-            <img id="pipe-top-img" src="pipe-top.png" alt="Top Pipe">
-            <img id="pipe-bottom-img" src="pipe-bottom.png" alt="Bottom Pipe">
-            <img id="background-img" src="background.png" alt="Background">
-            <img id="tap-icon" src="tap-icon.png" alt="Tap">
-        </div>
-        
-        <div id="game-over">
-            <div class="modal-content">
-                <h2>GAME OVER</h2>
-                <p class="score-text">Your score: <span id="final-score">0</span></p>
-                <button id="restart-btn" class="touch-button">PLAY AGAIN</button>
-            </div>
-        </div>
-        
-        <div id="start-screen">
-            <div class="modal-content">
-                <h1>FLAPPY BIRD</h1>
-                <div class="instructions">
-                    <div class="instruction-item">
-                        <img src="tap-icon.png" class="tap-icon"> Tap anywhere to jump
-                    </div>
-                    <div class="instruction-item">
-                        Avoid the pipes
-                    </div>
-                    <div class="instruction-item">
-                        Stay in the sky
-                    </div>
-                </div>
-                <button id="start-btn" class="touch-button">START GAME</button>
-            </div>
-        </div>
-        
-        <div id="score-display">0</div>
-        <div id="pause-screen">PAUSED<br><span class="tap-to-continue">Tap to continue</span></div>
-        <div id="touch-controls"></div>
-    </div>
+    <canvas id="gameCanvas"></canvas>
     <script src="game.js"></script>
 </body>
 </html>
