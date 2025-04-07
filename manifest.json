@@ -1,20 +1,25 @@
+// config.json
 {
-    "name": "Flappy Bird",
-    "short_name": "Flappy",
-    "start_url": ".",
-    "display": "standalone",
-    "background_color": "#2f80ed",
-    "theme_color": "#2f80ed",
-    "icons": [
-        {
-            "src": "icon-192.png",
-            "type": "image/png",
-            "sizes": "192x192"
-        },
-        {
-            "src": "icon-512.png",
-            "type": "image/png",
-            "sizes": "512x512"
-        }
-    ]
+    "bird": {
+        "width": 40,
+        "height": 30,
+        "gravity": 0.5,
+        "jump": -8,
+        "speed": 0,
+        "image": "bird.png"
+    },
+    "pipe": {
+        "width": 60,
+        "gap": 150,
+        "speed": 2,
+        "frequency": 90,
+        "image": "pipe.png"
+    },
+    "background": {
+        "speed": 1,
+        "image": "background.png"
+    },
+    "game": {
+        "fps": 60
+    }
 }
