@@ -13,11 +13,26 @@ const pauseScreen = document.getElementById('pause-screen');
 canvas.width = 400;
 canvas.height = 600;
 
+// Load images
+const birdImg = new Image();
+birdImg.src = 'https://cdn1.iconfinder.com/data/icons/video-games-32/24/video-game-flappy-bird-512.png';
+
+const pipeTopImg = new Image();
+pipeTopImg.src = 'pipe-top.png';
+
+const pipeBottomImg = new Image();
+pipeBottomImg.src = 'pipe-bottom.png';
+
+const backgroundImg = new Image();
+backgroundImg.src = 'background.png';
+
 // Game state
 let gameRunning = false;
 let gamePaused = false;
 let score = 0;
 let animationId = null;
+let imagesLoaded = 0;
+const totalImages = 4;
 
 // Bird properties
 const bird = {
@@ -28,8 +43,8 @@ const bird = {
     velocity: 0,
     gravity: 0.5,
     jump: -10,
-    color: '#ffcc00',
-    wingAngle: 0,
+    rotation: 0,
+    wingState: 0,
     wingDirection: 1
 };
 
@@ -47,6 +62,19 @@ const clouds = Array(5).fill().map(() => ({
     width: 60 + Math.random() * 60,
     speed: 0.5 + Math.random() * 1
 }));
+
+// Check when all images are loaded
+function imageLoaded() {
+    imagesLoaded++;
+    if (imagesLoaded === totalImages) {
+        startBtn.disabled = false;
+    }
+}
+
+birdImg.onload = imageLoaded;
+pipeTopImg.onload = imageLoaded;
+pipeBottomImg.onload = imageLoaded;
+backgroundImg.onload = imageLoaded;
 
 // Event listeners
 startBtn.addEventListener('click', startGame);
@@ -72,6 +100,7 @@ function startGame() {
     scoreDisplay.textContent = score;
     bird.y = 300;
     bird.velocity = 0;
+    bird.rotation = 0;
     pipes.length = 0;
     
     // Hide screens
@@ -112,12 +141,8 @@ function gameLoop() {
 }
 
 function drawBackground() {
-    // Sky gradient
-    const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    skyGradient.addColorStop(0, '#56ccf2');
-    skyGradient.addColorStop(1, '#2f80ed');
-    ctx.fillStyle = skyGradient;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Draw sky background
+    ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
     
     // Draw clouds
     ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
@@ -144,9 +169,12 @@ function updateBird() {
     bird.velocity += bird.gravity;
     bird.y += bird.velocity;
     
+    // Update rotation based on velocity
+    bird.rotation = Math.min(Math.max(bird.velocity * 3, -25), 25);
+    
     // Update wing animation
-    bird.wingAngle += 0.2 * bird.wingDirection;
-    if (Math.abs(bird.wingAngle) > 0.5) {
+    bird.wingState += 0.1 * bird.wingDirection;
+    if (Math.abs(bird.wingState) > 0.5) {
         bird.wingDirection *= -1;
     }
     
@@ -159,37 +187,17 @@ function updateBird() {
 
 function drawBird() {
     ctx.save();
-    ctx.translate(bird.x, bird.y);
+    ctx.translate(bird.x + bird.width / 2, bird.y + bird.height / 2);
+    ctx.rotate(bird.rotation * Math.PI / 180);
     
-    // Body
-    ctx.fillStyle = bird.color;
-    ctx.beginPath();
-    ctx.ellipse(bird.width / 2, bird.height / 2, bird.width / 2, bird.height / 2, 0, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Beak
-    ctx.fillStyle = '#ff8c00';
-    ctx.beginPath();
-    ctx.moveTo(bird.width, bird.height / 2 - 5);
-    ctx.lineTo(bird.width + 15, bird.height / 2);
-    ctx.lineTo(bird.width, bird.height / 2 + 5);
-    ctx.fill();
-    
-    // Eye
-    ctx.fillStyle = 'black';
-    ctx.beginPath();
-    ctx.arc(bird.width - 10, bird.height / 2 - 5, 3, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Wings
-    ctx.fillStyle = '#d4a600';
-    ctx.save();
-    ctx.translate(bird.width / 2, bird.height / 2);
-    ctx.rotate(bird.wingAngle);
-    ctx.beginPath();
-    ctx.ellipse(-10, 0, 15, 5, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
+    // Draw bird image
+    ctx.drawImage(
+        birdImg,
+        -bird.width / 2,
+        -bird.height / 2,
+        bird.width,
+        bird.height
+    );
     
     ctx.restore();
 }
@@ -197,7 +205,7 @@ function drawBird() {
 function flap() {
     if (gameRunning && !gamePaused) {
         bird.velocity = bird.jump;
-        bird.wingAngle = -0.8; // Reset wing position on flap
+        bird.wingState = -0.5; // Reset wing position on flap
     }
 }
 
@@ -237,26 +245,22 @@ function updatePipes() {
 function drawPipes() {
     for (const pipe of pipes) {
         // Top pipe
-        const topPipeGradient = ctx.createLinearGradient(pipe.x, 0, pipe.x + pipeWidth, 0);
-        topPipeGradient.addColorStop(0, '#4CAF50');
-        topPipeGradient.addColorStop(1, '#2E7D32');
-        ctx.fillStyle = topPipeGradient;
-        ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
-        
-        // Top pipe edge
-        ctx.fillStyle = '#1B5E20';
-        ctx.fillRect(pipe.x, pipe.topHeight - 15, pipeWidth, 15);
+        ctx.drawImage(
+            pipeTopImg,
+            pipe.x,
+            pipe.topHeight - pipeTopImg.height,
+            pipeWidth,
+            pipeTopImg.height
+        );
         
         // Bottom pipe
-        const bottomPipeGradient = ctx.createLinearGradient(pipe.x, pipe.bottomY, pipe.x + pipeWidth, pipe.bottomY);
-        bottomPipeGradient.addColorStop(0, '#4CAF50');
-        bottomPipeGradient.addColorStop(1, '#2E7D32');
-        ctx.fillStyle = bottomPipeGradient;
-        ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
-        
-        // Bottom pipe edge
-        ctx.fillStyle = '#1B5E20';
-        ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, 15);
+        ctx.drawImage(
+            pipeBottomImg,
+            pipe.x,
+            pipe.bottomY,
+            pipeWidth,
+            pipeBottomImg.height
+        );
     }
 }
 
