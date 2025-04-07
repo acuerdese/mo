@@ -8,14 +8,26 @@ const restartBtn = document.getElementById('restart-btn');
 const scoreDisplay = document.getElementById('score-display');
 const finalScoreDisplay = document.getElementById('final-score');
 const pauseScreen = document.getElementById('pause-screen');
+const touchControls = document.getElementById('touch-controls');
 
-// Set canvas size
-canvas.width = 400;
-canvas.height = 600;
+// Set canvas size to full container
+function resizeCanvas() {
+    const container = document.getElementById('game-container');
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+    
+    // Adjust bird position on resize
+    if (gameRunning && !gamePaused) {
+        bird.y = Math.min(bird.y, canvas.height - bird.height);
+    }
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
 // Load images
 const birdImg = new Image();
-birdImg.src = 'https://cdn1.iconfinder.com/data/icons/video-games-32/24/video-game-flappy-bird-512.png';
+birdImg.src = 'bird.png';
 
 const pipeTopImg = new Image();
 pipeTopImg.src = 'pipe-top.png';
@@ -26,18 +38,21 @@ pipeBottomImg.src = 'pipe-bottom.png';
 const backgroundImg = new Image();
 backgroundImg.src = 'background.png';
 
+const tapIcon = new Image();
+tapIcon.src = 'tap-icon.png';
+
 // Game state
 let gameRunning = false;
 let gamePaused = false;
 let score = 0;
 let animationId = null;
 let imagesLoaded = 0;
-const totalImages = 4;
+const totalImages = 5;
 
 // Bird properties
 const bird = {
-    x: 100,
-    y: 300,
+    x: 50,
+    y: canvas.height / 2,
     width: 40,
     height: 30,
     velocity: 0,
@@ -51,17 +66,9 @@ const bird = {
 // Pipes properties
 const pipes = [];
 const pipeWidth = 60;
-const pipeGap = 150;
+const pipeGap = Math.min(200, canvas.height * 0.3);
 const pipeFrequency = 1500; // milliseconds
 let lastPipeTime = 0;
-
-// Clouds in background
-const clouds = Array(5).fill().map(() => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * (canvas.height / 2),
-    width: 60 + Math.random() * 60,
-    speed: 0.5 + Math.random() * 1
-}));
 
 // Check when all images are loaded
 function imageLoaded() {
@@ -75,20 +82,47 @@ birdImg.onload = imageLoaded;
 pipeTopImg.onload = imageLoaded;
 pipeBottomImg.onload = imageLoaded;
 backgroundImg.onload = imageLoaded;
+tapIcon.onload = imageLoaded;
 
-// Event listeners
-startBtn.addEventListener('click', startGame);
-restartBtn.addEventListener('click', startGame);
-canvas.addEventListener('click', flap);
-document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') {
-        if (!gameRunning) return;
+// Touch event listeners
+function setupTouchControls() {
+    // Enable full-screen touch area
+    touchControls.style.display = 'block';
+    
+    // Touch start handler
+    const handleStart = (e) => {
+        e.preventDefault();
+        if (!gameRunning) {
+            startGame();
+            return;
+        }
         if (gamePaused) {
             resumeGame();
-        } else {
-            flap();
-            pauseGame();
+            return;
         }
+        flap();
+    };
+    
+    // Add both touch and mouse events
+    touchControls.addEventListener('touchstart', handleStart);
+    touchControls.addEventListener('mousedown', handleStart);
+    
+    // Prevent scrolling on touch devices
+    document.addEventListener('touchmove', (e) => {
+        if (gameRunning) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+}
+
+// Event listeners for buttons
+startBtn.addEventListener('click', startGame);
+restartBtn.addEventListener('click', startGame);
+
+// Handle visibility changes (pause when tab loses focus)
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden && gameRunning && !gamePaused) {
+        pauseGame();
     }
 });
 
@@ -98,7 +132,7 @@ function startGame() {
     gamePaused = false;
     score = 0;
     scoreDisplay.textContent = score;
-    bird.y = 300;
+    bird.y = canvas.height / 2;
     bird.velocity = 0;
     bird.rotation = 0;
     pipes.length = 0;
@@ -143,25 +177,6 @@ function gameLoop() {
 function drawBackground() {
     // Draw sky background
     ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
-    
-    // Draw clouds
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-    clouds.forEach(cloud => {
-        // Update cloud position
-        cloud.x -= cloud.speed;
-        if (cloud.x + cloud.width < 0) {
-            cloud.x = canvas.width;
-            cloud.y = Math.random() * (canvas.height / 2);
-        }
-        
-        // Draw cloud
-        ctx.beginPath();
-        ctx.arc(cloud.x, cloud.y, cloud.width / 3, 0, Math.PI * 2);
-        ctx.arc(cloud.x + cloud.width / 3, cloud.y - cloud.width / 6, cloud.width / 4, 0, Math.PI * 2);
-        ctx.arc(cloud.x + cloud.width / 2, cloud.y, cloud.width / 3, 0, Math.PI * 2);
-        ctx.arc(cloud.x + cloud.width / 1.5, cloud.y + cloud.width / 6, cloud.width / 5, 0, Math.PI * 2);
-        ctx.fill();
-    });
 }
 
 function updateBird() {
@@ -205,7 +220,7 @@ function drawBird() {
 function flap() {
     if (gameRunning && !gamePaused) {
         bird.velocity = bird.jump;
-        bird.wingState = -0.5; // Reset wing position on flap
+        bird.wingState = -0.5;
     }
 }
 
@@ -302,3 +317,13 @@ function endGame() {
     gameOverScreen.style.display = 'flex';
     cancelAnimationFrame(animationId);
 }
+
+// Initialize the game
+setupTouchControls();
+
+// Optional: Add to home screen prompt
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    // You can show an "Add to Home Screen" button here
+    console.log('PWA install prompt available');
+});
