@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<marketplace>
+  <categories>
+    <category id="fruits-veggies">
+      <name>Fruits & Vegetables</name>
+      <image>images/fruits-veggies.jpg</image>
+      <description>Fresh and organic produce from local farms</description>
+    </category>
+    <category id="dairy">
+      <name>Dairy & Eggs</name>
+      <image>images/dairy.jpg</image>
+      <description>Milk, cheese, yogurt and farm-fresh eggs</description>
+    </category>
+    <category id="meats">
+      <name>Meats & Seafood</name>
+      <image>images/meats.jpg</image>
+      <description>Premium quality meats and fresh seafood</description>
+    </category>
+    <category id="bakery">
+      <name>Bakery</name>
+      <image>images/bakery.jpg</image>
+      <description>Freshly baked breads and pastries daily</description>
+    </category>
+    <category id="beverages">
+      <name>Beverages</name>
+      <image>images/beverages.jpg</image>
+      <description>Juices, sodas, teas and specialty drinks</description>
+    </category>
+    <category id="pantry">
+      <name>Pantry Staples</name>
+      <image>images/pantry.jpg</image>
+      <description>All your cooking and baking essentials</description>
+    </category>
+  </categories>
+  
+  <featured>
+    <product>
+      <name>Organic Apples</name>
+      <category>fruits-veggies</category>
+      <price>2.99</price>
+      <unit>lb</unit>
+      <image>images/fruits-veggies.jpg</image>
+    </product>
+    <product>
+      <name>Free Range Eggs</name>
+      <category>dairy</category>
+      <price>4.49</price>
+      <unit>dozen</unit>
+      <image>images/dairy.jpg</image>
+    </product>
+    <product>
+      <name>Whole Grain Bread</name>
+      <category>bakery</category>
+      <price>3.99</price>
+      <unit>loaf</unit>
+      <image>images/bakery.jpg</image>
+    </product>
+  </featured>
+</marketplace>
