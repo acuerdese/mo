@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<website>
+    <header>
+        <logoText>Papelsa</logoText>
+        <nav>
+            <item>Home</item>
+            <item>About</item>
+            <item>Products</item>
+            <item>Sustainability</item>
+            <item>Contact</item>
+        </nav>
+    </header>
+    <hero>
+        <title>Welcome to Papelsa</title>
+        <subtitle>Quality, Sustainability, and Responsibility</subtitle>
+        <image>https://images.unsplash.com/photo-1506784365847-bbadad4e1f6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80</image>
+        <button>Discover More</button>
+    </hero>
+    <about>
+        <title>About Us</title>
+        <description>Founded in 1978, Papelsa is a leader in producing sustainable paper and corrugated cardboard boxes. Our commitment to quality, environmental care, and social responsibility drives innovation and customer satisfaction.</description>
+        <image>https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80</image>
+    </about>
+    <products>
+        <title>Our Products</title>
+        <description>We offer 100% recycled, recyclable, and responsible paper, sheets, and corrugated cardboard boxes tailored to your needs.</description>
+        <image>https://images.unsplash.com/photo-1578575437130-527eed3abbec?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80</image>
+    </products>
+    <sustainability>
+        <title>Sustainability</title>
+        <description>Our sustainability initiatives include recycling 81,000 tons in 2017, using 100% recycled fibers, and reducing energy and water consumption significantly.</description>
+        <image>https://images.unsplash.com/photo-1447877085163-3cce90322caa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80</image>
+    </sustainability>
+    <contact>
+        <title>Contact Us</title>
+        <description>Reach out to our team for inquiries about our products, services, or sustainability efforts.</description>
+        <form>
+            <name>Name</name>
+            <email>Email</email>
+            <message>Message</message>
+            <button>Send</button>
+        </form>
+        <image>https://images.unsplash.com/photo-1516321318423-0a7448671b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80</image>
+    </contact>
+    <footer>
+        <text>&copy; 2025 Papelsa. All rights reserved.</text>
+    </footer>
+</website>
