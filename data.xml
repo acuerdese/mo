@@ -3,32 +3,32 @@
   <categories>
     <category id="fruits-veggies">
       <name>Fruits & Vegetables</name>
-      <image>images/fruits-veggies.jpg</image>
+      <image>https://images.unsplash.com/photo-1572883454114-1cf8e836b8c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80</image>
       <description>Fresh and organic produce from local farms</description>
     </category>
     <category id="dairy">
       <name>Dairy & Eggs</name>
-      <image>images/dairy.jpg</image>
+      <image>https://images.pexels.com/photos/90894/pexels-photo-90894.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=500</image>
       <description>Milk, cheese, yogurt and farm-fresh eggs</description>
     </category>
     <category id="meats">
       <name>Meats & Seafood</name>
-      <image>images/meats.jpg</image>
+      <image>https://images.unsplash.com/photo-1518492104633-130d0cc84637?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80</image>
       <description>Premium quality meats and fresh seafood</description>
     </category>
     <category id="bakery">
       <name>Bakery</name>
-      <image>images/bakery.jpg</image>
+      <image>https://images.pexels.com/photos/6605213/pexels-photo-6605213.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=500</image>
       <description>Freshly baked breads and pastries daily</description>
     </category>
     <category id="beverages">
       <name>Beverages</name>
-      <image>images/beverages.jpg</image>
+      <image>https://images.unsplash.com/photo-1551029506-0807df4e2031?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80</image>
       <description>Juices, sodas, teas and specialty drinks</description>
     </category>
     <category id="pantry">
       <name>Pantry Staples</name>
-      <image>images/pantry.jpg</image>
+      <image>https://images.pexels.com/photos/3962285/pexels-photo-3962285.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=500</image>
       <description>All your cooking and baking essentials</description>
     </category>
   </categories>
@@ -39,21 +39,42 @@
       <category>fruits-veggies</category>
       <price>2.99</price>
       <unit>lb</unit>
-      <image>images/fruits-veggies.jpg</image>
+      <image>https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80</image>
     </product>
     <product>
       <name>Free Range Eggs</name>
       <category>dairy</category>
       <price>4.49</price>
       <unit>dozen</unit>
-      <image>images/dairy.jpg</image>
+      <image>https://images.pexels.com/photos/162712/egg-white-food-protein-162712.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=500</image>
     </product>
     <product>
       <name>Whole Grain Bread</name>
       <category>bakery</category>
       <price>3.99</price>
       <unit>loaf</unit>
-      <image>images/bakery.jpg</image>
+      <image>https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80</image>
+    </product>
+    <product>
+      <name>Fresh Salmon Fillet</name>
+      <category>meats</category>
+      <price>9.99</price>
+      <unit>lb</unit>
+      <image>https://images.pexels.com/photos/3296395/pexels-photo-3296395.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=500</image>
+    </product>
+    <product>
+      <name>Organic Orange Juice</name>
+      <category>beverages</category>
+      <price>3.49</price>
+      <unit>bottle</unit>
+      <image>https://images.unsplash.com/photo-1603569283847-aa295f0d016a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80</image>
+    </product>
+    <product>
+      <name>Extra Virgin Olive Oil</name>
+      <category>pantry</category>
+      <price>8.99</price>
+      <unit>bottle</unit>
+      <image>https://images.pexels.com/photos/33783/olive-oil-salad-healthy-italian.jpg?auto=compress&cs=tinysrgb&dpr=2&h=500</image>
     </product>
   </featured>
 </marketplace>
