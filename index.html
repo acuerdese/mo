@@ -3,85 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Papelsa Clone</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>LightTrail Marketplace</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header -->
-    <header class="bg-green-600 text-white p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 id="logo" class="text-2xl font-bold"></h1>
-            <nav id="nav" class="hidden md:flex space-x-4"></nav>
-            <button id="menu-toggle" class="md:hidden">☰</button>
-        </div>
+    <header>
+        <h1 id="marketplace-title"></h1>
+        <p id="marketplace-description"></p>
     </header>
-
-    <!-- Hero -->
-    <section id="hero" class="bg-gray-100 py-20 text-center">
-        <div class="container mx-auto">
-            <h2 id="hero-title" class="text-4xl font-bold mb-4"></h2>
-            <p id="hero-subtitle" class="text-xl mb-6"></p>
-            <img id="hero-image" class="mx-auto mb-6 w-full max-w-2xl" src="" alt="Hero Image">
-            <a id="hero-button" href="#about" class="bg-green-600 text-white px-6 py-3 rounded"></a>
-        </div>
-    </section>
-
-    <!-- About -->
-    <section id="about" class="py-20">
-        <div class="container mx-auto flex flex-col md:flex-row items-center">
-            <div class="md:w-1/2 p-6">
-                <h2 id="about-title" class="text-3xl font-bold mb-4"></h2>
-                <p id="about-description" class="text-lg"></p>
-            </div>
-            <img id="about-image" class="md:w-1/2 p-6 w-full" src="" alt="About Image">
-        </div>
-    </section>
-
-    <!-- Products -->
-    <section id="products" class="bg-gray-100 py-20">
-        <div class="container mx-auto flex flex-col md:flex-row items-center">
-            <img id="products-image" class="md:w-1/2 p-6 w-full" src="" alt="Products Image">
-            <div class="md:w-1/2 p-6">
-                <h2 id="products-title" class="text-3xl font-bold mb-4"></h2>
-                <p id="products-description" class="text-lg"></p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sustainability -->
-    <section id="sustainability" class="py-20">
-        <div class="container mx-auto flex flex-col md:flex-row items-center">
-            <div class="md:w-1/2 p-6">
-                <h2 id="sustainability-title" class="text-3xl font-bold mb-4"></h2>
-                <p id="sustainability-description" class="text-lg"></p>
-            </div>
-            <img id="sustainability-image" class="md:w-1/2 p-6 w-full" src="" alt="Sustainability Image">
-        </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="bg-gray-100 py-20">
-        <div class="container mx-auto flex flex-col md:flex-row items-center">
-            <div class="md:w-1/2 p-6">
-                <h2 id="contact-title" class="text-3xl font-bold mb-4"></h2>
-                <p id="contact-description" class="text-lg mb-6"></p>
-                <form id="contact-form" class="space-y-4">
-                    <input id="form-name" type="text" placeholder="Name" class="w-full p-2 border rounded">
-                    <input id="form-email" type="email" placeholder="Email" class="w-full p-2 border rounded">
-                    <textarea id="form-message" placeholder="Message" class="w-full p-2 border rounded h-32"></textarea>
-                    <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded"></button>
-                </form>
-            </div>
-            <img id="contact-image" class="md:w-1/2 p-6 w-full" src="" alt="Contact Image">
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-green-600 text-white p-4 text-center">
-        <p id="footer-text"></p>
+    <main>
+        <section id="products" class="product-grid"></section>
+    </main>
+    <footer>
+        <p>&copy; 2025 LightTrail Marketplace. All rights reserved.</p>
     </footer>
-
     <script src="script.js"></script>
 </body>
 </html>
